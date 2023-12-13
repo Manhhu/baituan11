@@ -1,16 +1,7 @@
-"""
-Custom SVM Kernels
-
-Author: Eric Eaton, 2014
-
-"""
-
 import numpy as np
-
 
 _polyDegree = 2
 _gaussSigma = 1
-
 
 def myPolynomialKernel(X1, X2):
     '''
@@ -20,9 +11,7 @@ def myPolynomialKernel(X1, X2):
         Returns:
             An n1-by-n2 numpy array representing the Kernel (Gram) matrix
     '''
-    return #TODO
-
-
+    return np.power(np.dot(X1, X2.T) + 1, _polyDegree)
 
 def myGaussianKernel(X1, X2):
     '''
@@ -32,11 +21,10 @@ def myGaussianKernel(X1, X2):
         Returns:
             An n1-by-n2 numpy array representing the Kernel (Gram) matrix
     '''
-    return #TODO
+    pairwise_dists = np.sum(X1**2, axis=1, keepdims=True) + np.sum(X2**2, axis=1) - 2 * np.dot(X1, X2.T)
+    return np.exp(-pairwise_dists / (2 * (_gaussSigma**2)))
 
-
-
-def myCosineSimilarityKernel(X1,X2):
+def myCosineSimilarityKernel(X1, X2):
     '''
         Arguments:
             X1 - an n1-by-d numpy array of instances
@@ -44,5 +32,6 @@ def myCosineSimilarityKernel(X1,X2):
         Returns:
             An n1-by-n2 numpy array representing the Kernel (Gram) matrix
     '''
-    return #TODO (CIS 519 ONLY)
-
+    norm_X1 = np.linalg.norm(X1, axis=1, keepdims=True)
+    norm_X2 = np.linalg.norm(X2, axis=1, keepdims=True)
+    return np.dot(X1, X2.T) / (norm_X1 * norm_X2.T)

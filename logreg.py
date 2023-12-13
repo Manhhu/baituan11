@@ -1,63 +1,66 @@
-import numpy as np
+'''
+    TEMPLATE FOR MACHINE LEARNING HOMEWORK
+    AUTHOR Eric Eaton
+'''
+
+
 
 class LogisticRegression:
-    def __init__(self, alpha, regLambda, epsilon, maxNumIters):
-        self.alpha = alpha
-        self.regLambda = regLambda
-        self.epsilon = epsilon
-        self.maxNumIters = maxNumIters
-        self.theta = None 
-    def sigmoid(self, z):
-        # Implement the sigmoid function
-        return 1 / (1 + np.exp(-z))
+
+    def __init__(self, alpha = 0.01, regLambda=0.01, epsilon=0.0001, maxNumIters = 10000):
+        '''
+        Constructor
+        '''
+
+    
 
     def computeCost(self, theta, X, y, regLambda):
-        # Implement the logistic regression cost function
-        h = self.sigmoid(np.dot(X, theta))
-        cost = (-1 / len(y)) * np.sum(y * np.log(h) + (1 - y) * np.log(1 - h))
-        reg_term = (regLambda / (2 * len(y))) * np.sum(theta[1:]**2)
-        return cost + reg_term
+        '''
+        Computes the objective function
+        Arguments:
+            X is a n-by-d numpy matrix
+            y is an n-dimensional numpy vector
+            regLambda is the scalar regularization constant
+        Returns:
+            a scalar value of the cost  ** make certain you're not returning a 1 x 1 matrix! **
+        '''
 
+    
+    
     def computeGradient(self, theta, X, y, regLambda):
-        # Implement the gradient of the logistic regression cost function
-        h = self.sigmoid(np.dot(X, theta))
-        gradient = (1 / len(y)) * np.dot(X.T, (h - y))
-        reg_term = (regLambda / len(y)) * np.concatenate(([0], theta[1:]))
-        return gradient + reg_term
+        '''
+        Computes the gradient of the objective function
+        Arguments:
+            X is a n-by-d numpy matrix
+            y is an n-dimensional numpy vector
+            regLambda is the scalar regularization constant
+        Returns:
+            the gradient, an d-dimensional vector
+        '''
+    
 
-    def hasConverged(self, theta, oldTheta):
-        # Implement the convergence test
-        return np.linalg.norm(theta - oldTheta, 2) <= self.epsilon
 
     def fit(self, X, y):
-        # Add intercept term to X
-       
-        #X = np.concatenate((np.ones((n, 1)), X), axis=1)
-        n, d = X
-        self.theta = np.zeros(d)
-        #X = np.concatenate((np.ones((X.shape[0], 1)), X), axis=1)
-        X = np.concatenate((np.ones((n, 1)), X), axis=1)
-        # Initialize theta to random values with mean 0
-        n, d = X.shape
-        self.theta = np.random.randn(X.shape[1])
+        '''
+        Trains the model
+        Arguments:
+            X is a n-by-d numpy matrix
+            y is an n-dimensional numpy vector
+        '''
 
-        for i in range(self.maxNumIters):
-            gradient = self.computeGradient(self.theta, X, y, self.regLambda)
-            oldTheta = self.theta.copy()
-            self.theta -= self.alpha * gradient
-            #self.theta -= self.alpha * self.computeGradient(self.theta, X, y, self.regLambda)
-            optimized_theta = self.theta - self.alpha * gradient
-            if np.linalg.norm(optimized_theta - oldTheta) < self.epsilon:
-                break
 
-           # if np.linalg.norm(optimized_theta - self.theta) < self.epsilon:
-               # break
-            if self.hasConverged(self.theta, oldTheta):
-                break
-            self.theta = optimized_theta     
     def predict(self, X):
-        # Add intercept term to X
-        X = np.concatenate((np.ones((X.shape[0], 1)), X), axis=1)
-        # Predict using the learned parameters
-        predictions = self.sigmoid(np.dot(X, self.theta))
-        return predictions >= 0.5
+        '''
+        Used the model to predict values for each instance in X
+        Arguments:
+            X is a n-by-d numpy matrix
+        Returns:
+            an n-dimensional numpy vector of the predictions
+        '''
+
+
+
+    def sigmoid(self, Z):
+    	'''
+    	Computes the sigmoid function 1/(1+exp(-z))
+    	'''
